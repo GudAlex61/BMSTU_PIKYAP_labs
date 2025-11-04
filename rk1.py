@@ -1,6 +1,5 @@
 from operator import itemgetter
 
-
 class Syntax:
     """Синтаксическая конструкция"""
 
@@ -92,6 +91,7 @@ def main():
         l_syntaxes = list(filter(lambda i: i[2] == l.name, one_to_many))
         if len(l_syntaxes) > 0:
             res2_unsorted.append((l.name, len(l_syntaxes)))
+
 
     # Сортировка по количеству конструкций
     res2 = sorted(res2_unsorted, key=itemgetter(1))
