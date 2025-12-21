@@ -1,4 +1,3 @@
-# test_rk2.py
 import unittest
 from rk2 import *
 
@@ -56,21 +55,33 @@ class TestRK2(unittest.TestCase):
 
     def test_task_b3(self):
         """Тест для задания Б3: поиск конструкций, оканчивающихся на 'ов'"""
-        # Добавим тестовую конструкцию, оканчивающуюся на 'ов'
-        syntaxes_with_ov = self.syntaxes + [Syntax(4, 'лов', 5, 1)]
+        # Модифицируем данные для теста - добавляем конструкцию, которая заканчивается на 'ов'
+        syntaxes_with_ov = self.syntaxes + [
+            Syntax(4, 'циклов', 5, 1),  # конструкция, оканчивающаяся на 'ов'
+            Syntax(5, 'методов', 7, 3)
+        ]
 
-        one_to_many = get_one_to_many(self.languages, syntaxes_with_ov)
-        many_to_many = get_many_to_many(self.languages, syntaxes_with_ov, self.syntaxes_languages)
+        # Создаем связи для новых конструкций
+        syntaxes_languages_with_ov = self.syntaxes_languages + [
+            SyntaxLanguage(1, 4),
+            SyntaxLanguage(3, 5)
+        ]
+
+        # Получаем соединение многие-ко-многим с новыми данными
+        many_to_many = get_many_to_many(self.languages, syntaxes_with_ov, syntaxes_languages_with_ov)
 
         result = task_b3(many_to_many)
 
-        # Должна найтись конструкция 'лов'
-        ov_constructions = [name for name, _ in result]
-        self.assertIn('лов', ov_constructions)
+        # Проверяем, что найдены конструкции, оканчивающиеся на 'ов'
+        self.assertGreater(len(result), 0)
 
-        # Проверяем, что все найденные конструкции оканчиваются на 'ов'
+        # Проверяем, что все найденные конструкции действительно оканчиваются на 'ов'
         for syntax_name, _ in result:
             self.assertTrue(syntax_name.endswith('ов'))
+
+        # Проверяем, что 'циклов' есть в результатах
+        ov_constructions = [name for name, _ in result]
+        self.assertIn('циклов', ov_constructions)
 
 
 if __name__ == '__main__':
